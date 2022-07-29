@@ -1,0 +1,92 @@
+#flanker task, participants are shown a center stimulus flanked by two other stimuli. They are then asked to respond to the center stimulus by pressing a button as quickly as possible.
+
+import pandas as pd
+import numpy as np
+from psychopy import visual, core, event
+
+#create window
+win = visual.Window(fullscr=True, color="#000000", units="pix")
+
+#create fixation cross
+fixation = visual.TextStim(win, text="+", color="#FFFFFF", font="Arial", height=40)
+
+#create stimuli
+stim_left = visual.TextStim(win, text="<", color="#FFFFFF", font="Arial", height=40)
+stim_right = visual.TextStim(win, text=">", color="#FFFFFF", font="Arial", height=40)
+
+#create response keys
+key_left = visual.TextStim(win, text="f", color="#FFFFFF", font="Arial", height=40)
+key_right = visual.TextStim(win, text="j", color="#FFFFFF", font="Arial", height=40)
+
+#create instructions
+instructions = visual.TextStim(win, text="Press the button that corresponds to the direction of the arrow.", color="#FFFFFF", font="Arial", height=40)
+
+#display instructions
+instructions.draw()
+win.flip()
+
+#wait for a keypress to start the task
+event.waitKeys()
+
+#create an empty dataframe to store responses
+responses = pd.DataFrame(columns=["response", "rt"])
+
+#draw fixation cross and flip to the window
+fixation.draw()
+win.flip()
+
+#wait for 500ms
+core.wait(0.5)
+
+#iterate through trials
+for i in range(20):
+    #create a random list of 0s and 1s to decide which flanker to present on each trial
+    flanker_list = np.random.randint(2, size=1)
+    
+    #draw left flanker
+    if flanker_list == 0:
+        stim_left.draw()
+    
+    #draw right flanker
+    else:
+        stim_right.draw()
+    
+    #flip to the window
+    win.flip()
+    
+    #wait for 500ms
+    core.wait(0.5)
+    
+    #draw fixation cross and flip to the window
+    fixation.draw()
+    win.flip()
+    
+    #wait for 500ms
+    core.wait(0.5)
+    
+    #get response and rt
+    response, rt = event.getKeys(keyList=["f", "j"], timeStamped=True)[0]
+    
+    #add response and rt to dataframe
+    responses.loc[i] = [response, rt]
+    
+#remove fixation cross
+fixation.text = ""
+
+#display left key
+key_left.draw()
+
+#display right key
+key_right.draw()
+
+#flip to the window
+win.flip()
+
+#wait for a keypress to end the task
+event.waitKeys()
+
+#close the window
+win.close()
+
+#save the dataframe as a csv file
+responses.to_csv("responses.csv")

@@ -1,0 +1,38 @@
+#rate the attractiveness of different pictures on a scale from 1 to 10. Including statistical analysis of differences between faces
+
+#import necessary packages
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#create dataframe to store ratings
+df = pd.DataFrame(columns=['face1','face2','face3','face4','face5','face6','face7','face8','face9','face10'])
+
+#collect ratings from participants
+for i in range(10):
+    face1 = int(input("Please rate the attractiveness of face 1 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face2 = int(input("Please rate the attractiveness of face 2 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face3 = int(input("Please rate the attractiveness of face 3 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face4 = int(input("Please rate the attractiveness of face 4 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face5 = int(input("Please rate the attractiveness of face 5 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face6 = int(input("Please rate the attractiveness of face 6 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face7 = int(input("Please rate the attractiveness of face 7 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face8 = int(input("Please rate the attractiveness of face 8 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face9 = int(input("Please rate the attractiveness of face 9 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    face10 = int(input("Please rate the attractiveness of face 10 on a scale from 1 (least attractive) to 10 (most attractive): "))
+    
+    #add ratings to dataframe
+    df.loc[i] = [face1,face2,face3,face4,face5,face6,face7,face8,face9,face10]
+
+#calculate mean ratings for each face
+df['mean'] = df.mean(axis=1)
+
+#plot ratings
+df.plot(kind='bar')
+plt.show()
+
+#calculate t-test
+from scipy import stats
+t, p = stats.ttest_ind(df['face1'], df['face2'])
+print("t = " + str(t))
+print("p = " + str(p))

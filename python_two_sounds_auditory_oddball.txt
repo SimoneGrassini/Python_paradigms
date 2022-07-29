@@ -1,0 +1,33 @@
+# The first tone is a standard tone and the second tone is an oddball tone.
+
+# The sequence of tones is presented at a rate of 1 tones per second.
+
+# import required modules
+import numpy as np
+import sounddevice as sd
+import matplotlib.pyplot as plt
+
+# define parameters
+tone_duration = 1 # duration of each tone in seconds
+tone_frequency = 1000 # frequency of standard tone in Hz
+oddball_frequency = 2000 # frequency of oddball tone in Hz
+tone_amplitude = 1 # amplitude of each tone
+
+# create arrays for standard and oddball tones
+standard_tone = tone_amplitude * np.sin(2 * np.pi * np.arange(tone_duration * tone_frequency) / tone_frequency)
+oddball_tone = tone_amplitude * np.sin(2 * np.pi * np.arange(tone_duration * oddball_frequency) / oddball_frequency)
+
+# create array for sequence of tones
+tone_sequence = np.zeros(100)
+tone_sequence[0::2] = standard_tone # every even tone is a standard tone
+tone_sequence[1::2] = oddball_tone # every odd tone is an oddball tone
+
+# play the sequence of tones
+sd.play(tone_sequence, tone_frequency)
+
+# wait for the sequence of tones to finish playing
+sd.wait()
+
+# plot the sequence of tones
+plt.plot(tone_sequence)
+plt.show()

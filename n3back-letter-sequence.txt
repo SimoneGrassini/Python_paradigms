@@ -1,0 +1,32 @@
+#import lib
+import random
+
+#create list of 100 letters
+letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+#create an empty list to store the 3-letter sequences
+three_letters = []
+
+#create a for loop to fill the list of 3-letter sequences
+for i in range(0,len(letters)-2):
+    three_letters.append([letters[i],letters[i+1],letters[i+2]])
+
+#shuffle the list of 3-letter sequences
+random.shuffle(three_letters)
+
+#create an empty list to store the participant responses
+responses = []
+
+#for each 3-letter sequence in the shuffled list,
+#check if it matches the previous 3-letter sequence
+#if so, append 'y' to responses
+#if not, append 'n' to responses
+for i in range(0,len(three_letters)):
+    if three_letters[i] == three_letters[i-1]:
+        responses.append('y')
+    else:
+        responses.append('n')
+
+#print the 3-letter sequences and responses side by side
+for i in range(0,len(three_letters)):
+    print(three_letters[i], responses[i])

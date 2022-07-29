@@ -1,0 +1,32 @@
+
+#import relevant libraries
+import numpy as np
+import random
+import sounddevice as sd
+import time
+
+#define duration of sounds
+tone_duration = 0.1
+gap_duration = 0.05
+
+#create list of frequencies to be used
+frequencies = [400, 1200]
+
+#generate list of sounds with random frequencies
+sounds = [np.random.choice(frequencies) for i in range(50)]
+
+#set first sound to be the oddball
+oddball = random.choice([400, 1200])
+
+#replace a random sound in the list with the oddball
+sounds[random.randint(0,49)] = oddball
+
+#pre-generate sounds for efficient playback
+generated_sounds = [sd.generate_tone(tone_duration, freq, amplitude=0.5) for freq in sounds]
+
+#play the sounds
+for sound in generated_sounds:
+    sd.play(sound, blocking=True)
+    sd.wait()
+    #insert a gap between sounds
+    time.sleep(gap_duration)
